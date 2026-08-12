@@ -34,6 +34,8 @@ try {
     $pyInstallerArgs = @("--noconfirm", "--clean", "--onedir", "--windowed", "--name", "QinChecker",
         "--paths", (Join-Path $projectRoot "src"),
         "--add-data", "$projectRoot\config;config",
+        "--add-data", "$projectRoot\assets\qinchecker-icon.png;assets",
+        "--icon", (Join-Path $projectRoot "assets\qinchecker.ico"),
         "--collect-all", "playwright",
         "--collect-all", "openpyxl")
     if (-not $SkipBrowser) {

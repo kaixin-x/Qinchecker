@@ -12,3 +12,4 @@ node_modules/
 *.xls
 *.egg-info/
 *.log
+assets/*-chromakey.png

@@ -9,6 +9,7 @@ from unittest.mock import patch
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 from PySide6.QtCore import QSettings
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication, QFrame, QMessageBox, QSplitter
 
 from qinchecker.models.review import Confidence, FieldKey, FieldProposal, ReviewState, SpeciesRecord
@@ -22,6 +23,7 @@ from qinchecker.services.manual_source import (
 )
 from qinchecker.services.parsing import CountyIndex, HabitatGlossary, SourceParser
 from qinchecker.services.cache import SourceCache
+from qinchecker.runtime import resource_root
 from qinchecker.ui.main_window import MainWindow, ManualSourceDialog
 
 
@@ -29,6 +31,11 @@ class ReviewLayoutTests(TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.app = QApplication.instance() or QApplication([])
+
+    def test_application_icon_asset_is_loadable(self) -> None:
+        icon_path = resource_root() / "assets" / "qinchecker-icon.png"
+        self.assertTrue(icon_path.is_file())
+        self.assertFalse(QIcon(str(icon_path)).isNull())
 
     def test_catalog_is_narrower_and_source_shows_only_values_url_and_original_text(self) -> None:
         with TemporaryDirectory() as directory:

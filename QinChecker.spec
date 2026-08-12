@@ -1,7 +1,7 @@
 # -*- mode: python ; coding: utf-8 -*-
 from PyInstaller.utils.hooks import collect_all
 
-datas = [('.\\config', 'config')]
+datas = [('.\\config', 'config'), ('.\\assets\\qinchecker-icon.png', 'assets')]
 binaries = []
 hiddenimports = []
 tmp_ret = collect_all('playwright')
@@ -33,6 +33,7 @@ exe = EXE(
     [],
     exclude_binaries=True,
     name='QinChecker',
+    icon='.\\assets\\qinchecker.ico',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
