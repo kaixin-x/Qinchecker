@@ -104,7 +104,8 @@ class ReviewLayoutTests(TestCase):
             )
 
             self.assertEqual(window.evidence_tabs.count(), 3)
-            self.assertEqual(len(window.findChildren(QFrame, "actionGroup")), 2)
+            self.assertEqual(len(window.findChildren(QFrame, "actionGroup")), 0)
+            self.assertFalse(hasattr(window, "workflow_stage_labels"))
 
             window.current_row = 2
             window._populate_table()
@@ -173,7 +174,6 @@ class ReviewLayoutTests(TestCase):
             window.show()
             self.app.processEvents()
 
-            self.assertEqual(window.workflow_stage_labels[0].property("stageState"), "active")
             self.assertGreaterEqual(window.table.verticalHeader().defaultSectionSize(), 46)
             self.assertIn("……", window.evidence.toPlainText())
             self.assertFalse(window.source_excerpt.isVisible())

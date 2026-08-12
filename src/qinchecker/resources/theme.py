@@ -7,7 +7,6 @@ QFrame#panel { background: #FFFFFF; border: 1px solid #DDE3EA; border-radius: 10
 QLabel#title { color: #163D36; font-size: 20px; font-weight: 700; }
 QLabel#subtitle { color: #667085; font-size: 12px; }
 QLabel#speciesIdentity { background: #EFF8F6; color: #164C42; border: 1px solid #CDE7E1; border-radius: 7px; padding: 8px 10px; font-size: 14px; font-weight: 700; }
-QLabel#actionGroupTitle { color: #475467; font-size: 12px; font-weight: 700; }
 QLabel#manualStatus { background: #F4F8FF; color: #254E80; border: 1px solid #D5E3F7; border-radius: 8px; padding: 10px; }
 QLabel#noticeBanner, QLabel#inlineMessage { background: #EFF8FF; color: #175CD3; border: 1px solid #B2DDFF; border-radius: 7px; padding: 8px 11px; }
 QLabel#noticeBanner[noticeKind="success"], QLabel#inlineMessage[noticeKind="success"] { background: #ECFDF3; color: #027A48; border-color: #ABEFC6; }
@@ -18,7 +17,6 @@ QLabel[stageState="active"] { background: #DFF2ED; color: #164C42; border: 1px s
 QLabel[stageState="done"] { background: #ECFDF3; color: #027A48; border-radius: 7px; padding: 8px; font-weight: 700; }
 QFrame#manualSourceColumn { background: #F8FAFC; border: 1px solid #E4E9EF; border-radius: 8px; }
 QLabel#manualColumnTitle { color: #164C42; font-size: 14px; font-weight: 700; }
-QFrame#actionGroup { background: #F8FAFC; border: 1px solid #E4E9EF; border-radius: 8px; }
 QPushButton { background: #176B5B; color: white; border: 0; border-radius: 7px; padding: 7px 12px; }
 QPushButton#warningButton { background: #FFFFFF; color: #B42318; border: 1px solid #FDA29B; }
 QPushButton#warningButton:hover { background: #FEF3F2; }

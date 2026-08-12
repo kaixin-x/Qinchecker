@@ -475,18 +475,6 @@ class MainWindow(QMainWindow):
         root_layout.setContentsMargins(16, 12, 16, 12)
         root_layout.setSpacing(12)
         root_layout.addWidget(self._build_top_bar())
-        workflow = QFrame(objectName="workflowStages")
-        workflow_layout = QHBoxLayout(workflow)
-        workflow_layout.setContentsMargins(6, 4, 6, 4)
-        workflow_layout.setSpacing(6)
-        self.workflow_stage_labels: list[QLabel] = []
-        for title in ("1  选择数据", "2  抓取比对", "3  字段复核", "4  导出结果"):
-            label = QLabel(title)
-            label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            label.setProperty("stageState", "upcoming")
-            self.workflow_stage_labels.append(label)
-            workflow_layout.addWidget(label)
-        root_layout.addWidget(workflow)
         self.notice_banner = QLabel()
         self.notice_banner.setObjectName("noticeBanner")
         self.notice_banner.setWordWrap(True)
@@ -497,14 +485,6 @@ class MainWindow(QMainWindow):
         status = QStatusBar()
         status.showMessage("请选择 Excel 文件、起始行和处理数量后开始。")
         self.setStatusBar(status)
-        self._set_workflow_stage(1)
-
-    def _set_workflow_stage(self, stage: int) -> None:
-        for index, label in enumerate(self.workflow_stage_labels, start=1):
-            state = "done" if index < stage else "active" if index == stage else "upcoming"
-            label.setProperty("stageState", state)
-            label.style().unpolish(label)
-            label.style().polish(label)
 
     def _notify(self, message: str, kind: str = "info", duration_ms: int = 5_000) -> None:
         """Show a non-blocking in-window message; confirmations remain modal."""
@@ -698,12 +678,8 @@ class MainWindow(QMainWindow):
         paging.addWidget(self.next_page_button)
         paging.addStretch()
         layout.addLayout(paging)
-        field_group = QFrame(objectName="actionGroup")
-        field_group_layout = QVBoxLayout(field_group)
-        field_group_layout.setContentsMargins(10, 7, 10, 7)
-        field_group_layout.setSpacing(5)
-        field_group_layout.addWidget(QLabel("当前字段", objectName="actionGroupTitle"))
         actions = QHBoxLayout()
+        actions.setSpacing(6)
         self.accept_button = QPushButton("接受来源")
         self.keep_button = QPushButton("保留原值")
         self.manual_button = QPushButton("手动编辑")
@@ -718,34 +694,23 @@ class MainWindow(QMainWindow):
             button.clicked.connect(callback)
             actions.addWidget(button)
         actions.addStretch()
-        field_group_layout.addLayout(actions)
-        layout.addWidget(field_group)
-
-        species_group = QFrame(objectName="actionGroup")
-        species_group_layout = QVBoxLayout(species_group)
-        species_group_layout.setContentsMargins(10, 7, 10, 7)
-        species_group_layout.setSpacing(5)
-        species_group_layout.addWidget(QLabel("当前植物", objectName="actionGroupTitle"))
-        species_actions = QHBoxLayout()
         self.accept_all_button = QPushButton("全部接受")
         self.accept_all_button.setEnabled(False)
         self.accept_all_button.setToolTip("接受当前物种所有尚未处理且具有来源建议的字段")
         self.accept_all_button.clicked.connect(self._accept_all_current_species)
-        species_actions.addWidget(self.accept_all_button)
+        actions.addWidget(self.accept_all_button)
         self.keep_all_button = QPushButton("全部保留")
         self.keep_all_button.setEnabled(False)
         self.keep_all_button.setToolTip("当前物种所有尚未处理的字段均保留原值")
         self.keep_all_button.clicked.connect(self._keep_all_current_species)
-        species_actions.addWidget(self.keep_all_button)
+        actions.addWidget(self.keep_all_button)
         self.restore_all_button = QPushButton("全部恢复修改")
         self.restore_all_button.setEnabled(False)
         self.restore_all_button.setToolTip("撤销当前植物所有人工决定，恢复为程序最初生成的字段建议")
         self.restore_all_button.clicked.connect(self._restore_all_current_species)
         self.restore_all_button.setObjectName("warningButton")
-        species_actions.addWidget(self.restore_all_button)
-        species_actions.addStretch()
-        species_group_layout.addLayout(species_actions)
-        layout.addWidget(species_group)
+        actions.addWidget(self.restore_all_button)
+        layout.addLayout(actions)
         return panel
 
     def _build_evidence_panel(self) -> QFrame:
@@ -833,7 +798,6 @@ class MainWindow(QMainWindow):
             return
         self.input_path = Path(path)
         self.file_path.setText(path)
-        self._set_workflow_stage(1)
         self.statusBar().showMessage("已选择文件。请确认起始行和处理条数。")
         self._log_activity(f"已选择输入文件：{self.input_path.name}")
 
@@ -843,7 +807,6 @@ class MainWindow(QMainWindow):
             if self.input_path is None:
                 return
         self.start_button.setEnabled(False)
-        self._set_workflow_stage(2)
         self.export_button.setEnabled(False)
         self.open_cache_button.setEnabled(False)
         self.clear_cache_button.setEnabled(False)
@@ -921,7 +884,6 @@ class MainWindow(QMainWindow):
         self._cancel_event = None
         self._watchdog.stop()
         self.export_button.setEnabled(True)
-        self._set_workflow_stage(3)
         self._populate_directory()
         if self.catalog.count() > 1:
             self.catalog.setCurrentRow(1)
@@ -969,7 +931,6 @@ class MainWindow(QMainWindow):
             f"处理失败：{detail}；用时 {elapsed_seconds:.2f} 秒。",
         )
         self._batch_started_at = None
-        self._set_workflow_stage(1)
         self._notify(f"处理失败：{detail}", "error", 12_000)
 
     def _cache_directory(self) -> Path:
@@ -1679,7 +1640,6 @@ class MainWindow(QMainWindow):
         self._thread.finished.connect(lambda: self._release_worker(worker))
         self._thread.finished.connect(self._thread.deleteLater)
         self._thread.start()
-        self._set_workflow_stage(4)
         self.statusBar().showMessage("正在导出新 Excel 和同名说明 TXT……")
         self._log_activity(f"开始导出：{output_path.name}")
 
@@ -1693,7 +1653,6 @@ class MainWindow(QMainWindow):
         self.export_button.setEnabled(True)
         self.statusBar().showMessage("导出失败。")
         self._log_activity(f"导出失败：{detail}")
-        self._set_workflow_stage(3)
         self._notify(f"导出失败：{detail}", "error", 12_000)
 
     def _export_execution_log(self) -> None:
