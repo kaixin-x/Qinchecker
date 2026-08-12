@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "workbook": {
+    "default_sheet_name": "Sheet1",
+    "header_excel_row": 1,
+    "default_start_excel_row": 2,
+    "default_batch_size": 50
+  },
+  "review": {
+    "preview_before_export": true,
+    "allow_export_with_pending_review": true,
+    "preserve_manual_decisions": true,
+    "highlight_changed_cells": true,
+    "append_change_note_to_remarks": true
+  },
+  "output": {
+    "main_sheet_adds_source_url_column": false,
+    "create_review_log_sheet": true,
+    "create_text_summary": true
+  },
+  "source": {
+    "primary_reference": "iPlant 中国植物志（修订版，FOC）",
+    "display_language": "zh-CN",
+    "store_raw_snapshot": true
+  },
+  "scraping": {
+    "browser": "system_chrome",
+    "navigation_timeout_seconds": 30,
+    "foc_wait_seconds": 12,
+    "nomenclature_wait_seconds": 12,
+    "distribution_wait_seconds": 20,
+    "retry_count": 2,
+    "minimum_delay_seconds": 1.5,
+    "maximum_delay_seconds": 3.0,
+    "concurrency": 1
+  }
+}

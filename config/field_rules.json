@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "rules": [
+    {"field": "Family", "source": "FOC", "policy": "replace_if_explicit"},
+    {"field": "科", "source": "FOC", "policy": "replace_if_explicit"},
+    {"field": "Species", "source": "FOC", "policy": "replace_if_accepted_name"},
+    {"field": "物种", "source": "FOC", "policy": "replace_if_accepted_name"},
+    {"field": "Lowest elevation (m)", "source": "FOC", "policy": "replace_if_explicit"},
+    {"field": "Highest elevation (m)", "source": "FOC", "policy": "replace_if_explicit"},
+    {"field": "区县", "source": "物种县级分布", "policy": "merge_only_if_explicit"},
+    {"field": "Habitat", "source": "FOC", "policy": "replace_if_reliably_translated"},
+    {"field": "Other occurrence", "source": "FOC", "policy": "merge_geographic_distribution"},
+    {"field": "Earliest flowering", "source": "FOC", "policy": "replace_if_explicit"},
+    {"field": "Latest flowering", "source": "FOC", "policy": "replace_if_explicit"}
+  ]
+}

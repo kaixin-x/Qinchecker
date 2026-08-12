@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+sessions/
+outputs/
+build/
+dist/
+node_modules/
+*.zip
+*.xlsx
+*.xls
+*.egg-info/
+*.log
